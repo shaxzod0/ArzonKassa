@@ -2,11 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/home"
-        android:title="Home"/>
+        android:icon="@drawable/ic_home"
+        android:title="Bosh saxifa"/>
 
     <item android:id="@+id/language"
         android:title="Languages"/>
 
     <item android:id="@+id/feedback"
-        android:title="FeedBack"/>
+        android:title=""
+        android:icon="@drawable/ic_feedback"
+        />
+    <item android:id="@+id/favorites"
+        android:title=""
+        android:icon="@drawable/ic_star"
+        />
+    <item android:id="@+id/settings"
+        android:title="Sozlamalar"
+        android:icon="@drawable/ic_settings"
+        />
+
 </menu>

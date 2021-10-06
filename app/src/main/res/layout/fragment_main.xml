@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:itemIconTint = "@drawable/drawer_selected"
+        app:itemTextColor="@color/white"
         android:background="@color/grey"
         app:menu="@menu/bottom_menu"
         />
