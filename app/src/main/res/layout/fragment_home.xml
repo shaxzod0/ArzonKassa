@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Fragment.BottomNavigationFragment.HomeFragment">
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTicket"
         android:layout_weight="1"

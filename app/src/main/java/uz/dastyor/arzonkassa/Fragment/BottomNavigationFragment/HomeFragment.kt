@@ -1,5 +1,6 @@
 package uz.dastyor.arzonkassa.Fragment.BottomNavigationFragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -35,22 +36,20 @@ import java.util.ArrayList
 const val BASE_URL="https://608bc945737e470017b754f0.mockapi.io/api/v1/"
 class HomeFragment : Fragment() , ItemClick {
 
-    private lateinit var adapter: RecyclerAdapter
+    lateinit var adapter: RecyclerAdapter
     val headerAdapter = HeaderAdapter()
+    lateinit var linearLayoutManager: LinearLayoutManager
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getMyData();
-
-        val cities = arrayOf("Andijon", "Namagan" , "Fergana" , "Jizzax" , "Termiz" , "Toshkent")
-        rvTicket.layoutManager = LinearLayoutManager(context)
-        adapter = RecyclerAdapter(
-            cities,
-            this@HomeFragment
-        )
+        rvTicket.setHasFixedSize(true)
+        adapter = RecyclerAdapter(this@HomeFragment)
         val concatAdapter = ConcatAdapter(headerAdapter,adapter)
         rvTicket.adapter = concatAdapter
+        linearLayoutManager= LinearLayoutManager(context)
+        rvTicket.layoutManager=linearLayoutManager
+        getMyData()
 
     }
 
@@ -66,31 +65,26 @@ class HomeFragment : Fragment() , ItemClick {
         val intent = Intent(requireContext() , OrderActivity::class.java)
         startActivity(intent)
     }
+
+
     private fun getMyData(){
         val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(BASE_URL).build().create(
             Apiinterface::class.java)
         val retrofitData = retrofitBuilder.getData()
 
-        retrofitData.enqueue(object: Callback<List<MyDataItem>?> {
+        retrofitData.enqueue(object: Callback<ArrayList<MyDataItem>?> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
-                call: Call<List<MyDataItem>?>,
-                response: Response<List<MyDataItem>?>
+                call: Call<ArrayList<MyDataItem>?>,
+                response: Response<ArrayList<MyDataItem>?>
             ) {
                 val responseBody=response.body()!!
-                val from = StringBuilder()
-                val to = StringBuilder()
-                val price = StringBuilder()
-                for (myData in responseBody) {
-                    from.append(myData.to)
-                    to.append(myData.from)
-                    price.append(myData.price)
-                }
-                tv_from.text=from
-                tv_to.text=to
-                tv_price.text="$price$"
+                adapter.updateList(responseBody)
+                adapter.notifyDataSetChanged()
+
             }
 
-            override fun onFailure(call: Call<List<MyDataItem>?>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<MyDataItem>?>, t: Throwable) {
                 Log.d("MainActivity","onFailure: "+t.message)
             }
 
